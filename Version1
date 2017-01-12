@@ -1,0 +1,83 @@
+console.log("Iniciando server Node");
+
+//Drone control code
+var bebop = require("node-bebop");
+var fs    = require("fs");
+
+var output = fs.createWriteStream("./video.h264");
+var	drone = bebop.createClient();
+var	video = drone.getVideoStream();
+
+	video.pipe(output);
+
+	drone.connect();
+	/*drone.connect(function(){
+		drone.MediaStreaming.videoEnable(1);
+	});*/
+//function bateria()
+//{
+//	console.log(drone.bateria());
+//}
+
+/*function despegar_drone()
+{
+	drone.connect(function() {
+		drone.takeoff();
+
+
+	//setTimeout(function() {
+	//	drone.land();
+	//}, 9000);	
+
+	});
+}*/
+	//droncatzim.config("control:altitude_max", 100000);
+	//droncatzim.takeoff();
+	//rotar_drone();
+	
+
+
+//function rotar_drone()
+//{
+//	droncatzim.stop();
+//	droncatzim.calibrate(0);
+//	droncatzim.up(1);
+	//bateria();
+//}
+
+/*function aterrizar_drone()
+{
+	drone.stop();
+	drone.land();
+//	bateria();
+}*/
+
+//Express y servidor web//
+var express = require("express");
+var web = express();
+var servidor;
+
+servidor = web.listen(8080, function () {
+console.log("Servidor arrancado :D")
+});
+
+web.get("/", function (req, res)  {
+	console.log("Home");
+	//bateria();
+	
+	res.sendFile(__dirname  + "/opciones.html");
+});
+
+//despegue url
+web.get("/despegar", function (req, res)  {
+	console.log("Despegando");
+	//despegar_drone();
+	drone.connect();
+	res.sendFile(__dirname  + "/opciones.html");
+});
+
+web.get("/aterrizar", function (req, res)  {
+	console.log("Aterrizando");
+	//aterrizar_drone();
+	res.sendFile(__dirname  + "/opciones.html");
+});
